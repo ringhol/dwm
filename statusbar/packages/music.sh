@@ -8,7 +8,7 @@ icon_color="^c#3B102B^^b#6873790x88^"
 text_color="^c#3B102B^^b#6873790x99^"
 signal=$(echo "^s$this^" | sed 's/_//')
 
-# [ ! "$(command -v mpc)" ] && echo command not found: mpc && return
+[ ! "$(command -v playerctl)" ] && echo command not found: mpc && return
 
 update() {
     music_text="$(playerctl metadata title)"
@@ -28,9 +28,9 @@ update() {
 click() {
     case "$1" in
         L) playerctl play-pause;;
-        # R) mpc toggle ;;
-        # U) mpc prev ;;
-        # D) mpc next ;;
+        R) playerctl toggle ;;
+        U) playerctl previous;;
+        D) playerctl next ;;
     esac
 }
 
