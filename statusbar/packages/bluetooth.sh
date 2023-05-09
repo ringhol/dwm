@@ -300,7 +300,7 @@ update() {
 		icon=" 󰂯 "
 	fi
   sed -i '/^export '$this'=.*$/d' $tempfile
-	printf "export %s=\"%s%s%s\"\n" $this "$signal" "$icon_color" "$icon" >>$tempfile
+	printf "export %s='%s%s%s'\n" $this "$signal" "$icon_color" "$icon" >> $tempfile
 }
 
 click() {
