@@ -14,6 +14,7 @@ signal=$(echo "^s$this^" | sed 's/_//')
 wifi_grep_keyword="已连接 到"
 wifi_disconnected="未连接"
 wifi_disconnected_notify="未连接到网络"
+
 if [ "$LANG" != "zh_CN.UTF-8" ]; then
     wifi_grep_keyword="connected to"
     wifi_disconnected="disconnected"
@@ -38,17 +39,51 @@ notify() {
 }
 
 call_nm() {
-    pid1=`ps aux | grep 'st -t statusutil' | grep -v grep | awk '{print $2}'`
-    pid2=`ps aux | grep 'st -t statusutil_nm' | grep -v grep | awk '{print $2}'`
+    pid1=`ps aux | grep 'kitty -t statusutil' | grep -v grep | awk '{print $2}'`
+    pid2=`ps aux | grep 'kitty -t statusutil_nm' | grep -v grep | awk '{print $2}'`
     mx=`xdotool getmouselocation --shell | grep X= | sed 's/X=//'`
     my=`xdotool getmouselocation --shell | grep Y= | sed 's/Y=//'`
     kill $pid1 && kill $pid2 || st -t statusutil_nm -g 60x25+$((mx - 240))+$((my + 20)) -c FGN -C "#222D31@4" -e 'nmtui-connect'
 }
 
+show_menu(){
+  notify-send -r 9527 "扫描Wi-Fi中..."
+  wifi_list=$(nmcli --fields "SECURITY,SSID" device wifi list | sed 1d | sed 's/  */ /g' | sed -E "s/WPA*.?\S/ /g" | sed "s/^--/ /g" | sed "s/  //g" | sed "/--/d")
+
+  connected=$(nmcli -fields WIFI g)
+  if [[ "$connected" =~ "enabled" ]]; then
+    toggle="睊  Disable Wi-Fi"
+  elif [[ "$connected" =~ "disabled" ]]; then
+    toggle="直  Enable Wi-Fi"
+  fi
+
+  chosen_network=$(echo -e "$toggle\n$wifi_list" | uniq -u | rofi -dmenu -i -selected-row 1 -p "Wi-Fi SSID: " )
+
+  chosen_id=$(echo "${chosen_network:3}" | xargs)
+
+  if [ "$chosen_network" = "" ]; then
+    exit
+  elif [ "$chosen_network" = "直  Enable Wi-Fi" ]; then
+    nmcli radio wifi on
+  elif [ "$chosen_network" = "睊  Disable Wi-Fi" ]; then
+    nmcli radio wifi off
+  else
+    success_message="成功连接到WiFi: \"$chosen_id\"."
+    saved_connections=$(nmcli -g NAME connection)
+    if [[ $(echo "$saved_connections" | grep -w "$chosen_id") = "$chosen_id" ]]; then
+      nmcli connection up id "$chosen_id" | grep "成功" && notify-send -r 9527 "wifi已连接" "$success_message" && exit
+    fi
+    if [[ "$chosen_network" =~ "" ]]; then
+      wifi_password=$(rofi -dmenu -p "密码: " )
+    fi
+    nmcli device wifi connect "$chosen_id" password "$wifi_password" | grep "成功" && notify-send  -r 9527 "wifi已连接" "$success_message"
+  fi
+}
+
 click() {
     case "$1" in
         L) notify ;;
-        R) call_nm ;;
+        R) show_menu ;;
     esac
 }
 
