@@ -1,5 +1,5 @@
 #! /bin/bash
-authorization="Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODYyODk1OTMsInVuYW1lIjoic2VtdG9yIn0.gCRUyqEvht4JmPR2LksuB1t0Nd7IFY7nd3qUPWqnjsE"
+_v2ray_auth=''
 
 tempfile=$(
 	cd $(dirname $0)
@@ -18,6 +18,15 @@ update() {
 	printf "export %s='%s%s%s'\n" $this "$signal" "$color" "$icon" >>$tempfile
 }
 
+get_authorization() {
+	resp=$(curl http://localhost:2017/api/login -X POST -d '{"username": "semtor", "password": "010107"}' -H "Content-Type: application/json")
+	_v2ray_auth=$(echo $resp | grep -o '"token":"[^"]\+"' | cut -d '"' -f4)
+	sed -i '/^export '_v2ray_auth'=.*$/d' $tempfile
+	printf "export %s='%s'\n" _v2ray_auth "$_v2ray_auth" >>$tempfile
+}
+
+
+
 notify() {
 	line1=" v2ray"
 	text=" v2ray未启动，老实在家待着吧"
@@ -27,12 +36,15 @@ notify() {
 
 toggle_clash() {
 	line1=" v2ray"
+  source $tempfile
+  [ -z "$_v2ray_auth" ] && get_authorization
+
 	if [ "$(ps -ef | grep -v grep | grep 'v2ray run')" ]; then
 		text=" 正在关闭v2ray!"
-		curl http://127.0.0.1:2017/api/v2ray -H "$authorization" -X DELETE &
+		curl http://127.0.0.1:2017/api/v2ray -H "Authorization: $_v2ray_auth" -X DELETE &
 	else
 		text=" 正在打开v2ray!"
-		curl http://127.0.0.1:2017/api/v2ray -H "$authorization" -X POST &
+		curl http://127.0.0.1:2017/api/v2ray -H "Authorization: $_v2ray_auth" -X POST &
 	fi
 	notify-send "$line1" "$text" -r 9527
 }
