@@ -12,7 +12,7 @@ with_temp() {
     # check
     [ ! "$(command -v sensors)" ] && echo command not found: sensors && return
 
-    temp_text=$(sensors | grep Tctl | awk '{printf "%d°C", $2}')  
+    temp_text=$(sensors | grep Core|head -n 1| awk '{printf "%d°C", $3}')  
     text=" $cpu_text $temp_text "
 } 
 
@@ -30,7 +30,7 @@ update() {
 }
 
 notify() {
-    notify-send " CPU tops" "\n$(ps axch -o cmd:15,%cpu --sort=-%cpu | head)\\n\\n(100% per core)" -r 9527
+    notify-send " CPU tops" "\n$(ps axch -o cmd:15,%cpu --sort=-%cpu | head)" -r 9527
 }
 
 call_btop() {

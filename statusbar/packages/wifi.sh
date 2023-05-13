@@ -35,7 +35,7 @@ update() {
 
 notify() {
     update
-    notify-send -r 9527 "$wifi_icon Wifi" "\n$wifi_text"
+    notify-send -r 9527 "$wifi_icon Wifi" "\n已连接到: <span color='#00BFFF'>$wifi_text</span>"
 }
 
 call_nm() {

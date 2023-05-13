@@ -90,7 +90,7 @@ static const Rule rules[] = {
 
     /** 普通优先度 */
     {"obs",                  NULL,                 NULL,             1 << 3,       0,          0,          0,        -1,      0}, // obs        tag -> 󰕧
-    {"chrome",               NULL,                 NULL,             1 << 4,       0,          0,          0,        -1,      0}, // chrome     tag -> 
+    {"chrome",               NULL,                 NULL,             1 << 2,       0,          0,          0,        -1,      0}, // chrome     tag -> 
     {"Chromium",             NULL,                 NULL,             1 << 4,       0,          0,          0,        -1,      0}, // Chromium   tag -> 
     {"music",                NULL,                 NULL,             1 << 5,       1,          0,          1,        -1,      0}, // music      tag ->  浮动、无边框
     { NULL,                 "qq",                  NULL,             1 << 6,       1,          0,          1,        -1,      0}, // qq         tag -> ﬄ 无边框
@@ -99,7 +99,7 @@ static const Rule rules[] = {
     {"Vncviewer",            NULL,                 NULL,             0,            1,          0,          1,        -1,      2}, // Vncviewer           浮动、无边框 屏幕顶部
     {"flameshot",            NULL,                 NULL,             0,            1,          0,          0,        -1,      0}, // 火焰截图            浮动
     {"scratchpad",          "scratchpad",         "scratchpad",      TAGMASK,      1,          1,          1,        -1,      2}, // scratchpad          浮动、全局、无边框 屏幕顶部
-    {"Pcmanfm",              NULL,                 NULL,             0,            1,          0,          1,        -1,      3}, // pcmanfm             浮动、无边框 右上角
+    {"org.gnome.Nautilus",   NULL,                 NULL,             0,            1,          0,          1,        -1,      0}, // pcmanfm             浮动、无边框 右上角
     {"wemeetapp",            NULL,                 NULL,             0,            1,          0,          0,        -1,      0}, // !!!腾讯会议在切换tag时有诡异bug导致退出 变成global来规避该问题
     {"kitty",                NULL,                 NULL,             TAGMASK,      1,          0,          0,        -1,      0}, // 
 
