@@ -18,7 +18,7 @@ with_temp() {
 
 update() {
     cpu_icon=""
-    cpu_text=$(top -n 1 -b | sed -n '3p' | awk '{printf "%02d%", 100 - $8}')
+    cpu_text=$(top -n 1 -b | sed -n '3p' | awk '{printf "%d%", 100 - $8}')
 
     icon=" $cpu_icon "
     text=" $cpu_text "
