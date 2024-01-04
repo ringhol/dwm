@@ -16,15 +16,15 @@ with_headphone() {
 	[ "$(amixer -c 0 get Headphone | grep -o '\[on\]')" ] && icons=(${icons[@]} "󰋋")
 }
 
-petition() {
-	text="$(curl -m 2 http://www.ggapi.cn/api/qiuqian)"
-	if [ $? -ne 0 ]; then
-		return
-	fi
-  poem1="<span color='#F0E68C'>󰇹 </span><span color='#7FFFD4'>$(echo $text | sed 's/【解签】.*//')</span>\n"
-  poem2="<span color='#FF69B4'> </span><span color='#00BFFF'>【解签】$(echo $text | sed 's/.*【解签】//')</span>"
-	notify-send '󰖨 每日一签' "$poem1$poem2" -r 10107 -t 20000
-}
+#petition() {
+#	text="$(curl -m 2 http://www.ggapi.cn/api/qiuqian)"
+#	if [ $? -ne 0 ]; then
+#		return
+#	fi
+#  poem1="<span color='#F0E68C'>󰇹 </span><span color='#7FFFD4'>$(echo $text | sed 's/【解签】.*//')</span>\n"
+#  poem2="<span color='#FF69B4'> </span><span color='#00BFFF'>【解签】$(echo $text | sed 's/.*【解签】//')</span>"
+#	notify-send '󰖨 每日一签' "$poem1$poem2" -r 10107 -t 20000
+#}
 
 update() {
 	icons=("󰔉")
@@ -51,8 +51,8 @@ notify() {
 # }
 
 leftclick() {
-	# notify
-	petition
+	notify
+	#petition
 }
 
 click() {

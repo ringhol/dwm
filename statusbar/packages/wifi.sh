@@ -30,7 +30,8 @@ update() {
     text=" $wifi_text "
 
     sed -i '/^export '$this'=.*$/d' $tempfile
-    printf "export %s='%s%s%s%s%s'\n" $this "$signal" "$icon_color" "$icon" "$text_color" "$text" >> $tempfile
+    # printf "export %s='%s%s%s%s%s'\n" $this "$signal" "$icon_color" "$icon" "$text_color" "$text" >> $tempfile
+    printf "export %s='%s%s%s'\n" $this "$signal" "$icon_color" "$icon"  >> $tempfile
 }
 
 notify() {
