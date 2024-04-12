@@ -25,8 +25,9 @@ signal=$(echo "^s$this^" | sed 's/_//')
 [ ! "$(command -v pactl)" ] && echo command not found: pactl && exit
 
 update() {
-    # export LANG=en_US.UTF8
+    export LANG=en_US.UTF8
     sink=$(pactl info | grep 'Default Sink' | awk '{print $3}')
+    # sink=$(pactl info | grep '默认音频入口' | awk '{print $2}')
     if [ "$sink" = "" ]; then sink=$(pactl info | grep '默认音频入口' | awk -F'：' '{print $2}');fi
     volunmuted=$(pactl list sinks | grep $sink -A 6 | sed -n '7p' | grep '静音：否')
     vol_text=$(pactl list sinks | grep $sink -A 7 | sed -n '8p' | awk '{printf int($4)}')

@@ -12,6 +12,7 @@ signal=$(echo "^s$this^" | sed 's/_//')
 
 update() {
     music_text="$(playerctl metadata title)"
+    music_text=${music_text:0:25}
     if [ $? -ne 0 ];then
       music_text="$(playerctl metadata xesam:url)"
     fi
@@ -35,7 +36,6 @@ notify(){
   if [ $? -ne 0 ];then
     name="$(playerctl metadata xesam:url)"
   fi
-
   text="󰝚  正在播放：
   $name"
   album="$(playerctl metadata album)"
@@ -45,8 +45,6 @@ notify(){
   [ "$artist" ] && text="$text 
   艺人:$artist"
   notify-send -r 9527 "$text"
-
-
 }
 
 click() {
